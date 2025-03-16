@@ -1,0 +1,97 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\python_prog\\Source\\Repos\\hotelguru\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C008F310-276C-491B-8E6E-E7C9800C51BC}|hotelguru.pyproj|D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\init_db.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C008F310-276C-491B-8E6E-E7C9800C51BC}|hotelguru.pyproj|solutionrelative:HotelGuruApp\\init_db.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C008F310-276C-491B-8E6E-E7C9800C51BC}|hotelguru.pyproj|D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\address.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C008F310-276C-491B-8E6E-E7C9800C51BC}|hotelguru.pyproj|solutionrelative:HotelGuruApp\\app\\models\\address.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C008F310-276C-491B-8E6E-E7C9800C51BC}|hotelguru.pyproj|D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\user.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C008F310-276C-491B-8E6E-E7C9800C51BC}|hotelguru.pyproj|solutionrelative:HotelGuruApp\\app\\models\\user.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C008F310-276C-491B-8E6E-E7C9800C51BC}|hotelguru.pyproj|D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\role.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C008F310-276C-491B-8E6E-E7C9800C51BC}|hotelguru.pyproj|solutionrelative:HotelGuruApp\\app\\models\\role.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "init_db.py",
+              "DocumentMoniker": "D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\init_db.py",
+              "RelativeDocumentMoniker": "HotelGuruApp\\init_db.py",
+              "ToolTip": "D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\init_db.py",
+              "RelativeToolTip": "HotelGuruApp\\init_db.py",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACMAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
+              "WhenOpened": "2025-03-16T14:45:59.004Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "address.py",
+              "DocumentMoniker": "D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\address.py",
+              "RelativeDocumentMoniker": "HotelGuruApp\\app\\models\\address.py",
+              "ToolTip": "D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\address.py",
+              "RelativeToolTip": "HotelGuruApp\\app\\models\\address.py",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
+              "WhenOpened": "2025-03-16T14:54:04.719Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "user.py",
+              "DocumentMoniker": "D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\user.py",
+              "RelativeDocumentMoniker": "HotelGuruApp\\app\\models\\user.py",
+              "ToolTip": "D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\user.py",
+              "RelativeToolTip": "HotelGuruApp\\app\\models\\user.py",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
+              "WhenOpened": "2025-03-15T19:55:39.328Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "role.py",
+              "DocumentMoniker": "D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\role.py",
+              "RelativeDocumentMoniker": "HotelGuruApp\\app\\models\\role.py",
+              "ToolTip": "D:\\python_prog\\Source\\Repos\\hotelguru\\HotelGuruApp\\app\\models\\role.py",
+              "RelativeToolTip": "HotelGuruApp\\app\\models\\role.py",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
+              "WhenOpened": "2025-03-15T19:54:06.305Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
