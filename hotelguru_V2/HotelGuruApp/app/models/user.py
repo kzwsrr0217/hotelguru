@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from marshmallow import Schema, fields
 
 
+
 UserRole = Table(
     "userroles",
     Base.metadata,
@@ -36,3 +37,8 @@ class User(db.Model):
         
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+# class UserSchemaResponse(Schema):
+#     id = fields.Integer()
+#     name = fields.String()
+#     email = fields.String()
