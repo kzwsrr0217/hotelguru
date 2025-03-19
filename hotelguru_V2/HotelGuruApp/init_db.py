@@ -39,4 +39,27 @@ app.app_context().push()
 
 # db.session.commit()
 
+#Hotel
+#from app.models.hotel import Hotel
 
+#db.session.add(Hotel(name="Hotel Test", address="Veszprém", phone="+3620111111"))
+#db.session.commit()
+
+#Room
+#from app.models.room import Room
+
+#db.session.add(Room(name="Room Test", description="Test", price=10000, hotel_id=1))
+#db.session.commit()
+
+#Service
+
+#from app.models.service import Service
+#db.session.add(Service(name="Service Test", description="Test", price=1000, hotel_id=1))
+#db.session.commit()
+
+# vagy egybe
+
+# db.session.add_all([ Hotel(name="Hotel Test", address="Veszprém", phone="+3620111111"),
+#                      Room(name="Room Test", description="Test", price=10000, hotel_id=1),
+#                      Service(name="Service Test", description="Test", price=1000, hotel_id=1)])
+# db.session.commit()
