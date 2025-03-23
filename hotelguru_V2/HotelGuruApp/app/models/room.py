@@ -1,21 +1,29 @@
 from __future__ import annotations
 
-from typing import List, Optional
 from app.extensions import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.types import String, Integer, Float
+from sqlalchemy.types import Integer, String, Float
+from typing import List, Optional
+
+
 
 class Room(db.Model):
     __tablename__ = "rooms"
     id: Mapped[int] = mapped_column(primary_key=True)
-    type: Mapped[str] = mapped_column(String(20))  # Egyszerű szöveges típus (pl. "egyágyas", "kétágyas", "lakosztály")
+    number: Mapped[int] = mapped_column(Integer, nullable=False)
+    floor: Mapped[int] = mapped_column(Integer, nullable=False)
+    name: Mapped[Optional[str]] = mapped_column(String(50))
+    description: Mapped[Optional[str]] = mapped_column(String(200))
     price: Mapped[float] = mapped_column(Float)  # Ár, lebegőpontos számként
-    description: Mapped[Optional[str]] = mapped_column(String(100))  # Opcionális leírás
-    is_available: Mapped[bool] = mapped_column(default=True)  # Foglalható-e a szoba
+    is_available: Mapped[bool] = mapped_column(default=True)
     
-    hotel_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("hotels.id"))
-    hotel: Mapped["Hotel"] = relationship("Hotel", back_populates="rooms")
+    room_type_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("room_types.id"), nullable=False)
+    room_type: Mapped["RoomType"] = relationship("RoomType", back_populates="rooms")
 
-    services: Mapped[List["Service"]] = relationship("Service", back_populates="room")
+    reservations: Mapped[List["Reservation"]] = relationship(back_populates="room")
 
+    
+    
 
+    def __repr__(self) -> str:
+        return f"Room(id={self.id!r}, number={self.number!s}, type={self.room_type!s}, available={self.is_available!r})"
