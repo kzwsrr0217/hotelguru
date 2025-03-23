@@ -22,3 +22,19 @@ class Reservation(db.Model):
 
     def __repr__(self) -> str:
         return f"Reservation(id={self.id!r}, start_date={self.start_date!r}, end_date={self.end_date!r}, reservation_date={self.reservation_date!r})"
+
+    def create_reservation(user_id: int, room_id: int, start_date: date, end_date: date) -> Reservation:
+            new_reservation = Reservation(
+                user_id = user_id,
+                room_id = room_id,
+                start_date = start_date,
+                end_date = end_date,
+                reservation_date = date_today()
+                )
+            db.session.add(new_reservation)
+            db.session.commit()
+            return new_reservation
+
+#példa hívásra:
+#new_reservation = create_reservation(user_id =1, room_id=101, start_date =date(2025, 4, 3))
+#print(new_reservation)
