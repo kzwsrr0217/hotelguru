@@ -28,6 +28,8 @@ class User(db.Model):
    
     address_id: Mapped[int] = mapped_column(ForeignKey("addresses.id"))
     address : Mapped["Address"] = relationship(back_populates="user", lazy=True)
+
+    reservations: Mapped[List["Reservation"]] = relationship(back_populates="user")
         
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, name={self.name!s}, email={self.email!r})"
