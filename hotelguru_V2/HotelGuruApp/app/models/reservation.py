@@ -36,6 +36,9 @@ class Reservation(db.Model):
             raise ValueError(f"Felhasználó a következő id-val nem létezik: {user_id} ")
         if not room:
             raise ValueError(f"Szoba a következő id-val nem létezik: {room_id} ")
+        
+        if not room.is_available:
+        raise ValueError(f"A szoba (id={room_id}) jelenleg nem elérhető.")
 
         # Új foglalás létrehozása
         new_reservation = Reservation(
