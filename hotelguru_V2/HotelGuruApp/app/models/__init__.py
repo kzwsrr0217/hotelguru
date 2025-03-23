@@ -6,6 +6,7 @@ import app.models.room
 import app.models.service
 import app.models.invoice
 import app.models.reservation
+import app.models.association_tables
 
 
 

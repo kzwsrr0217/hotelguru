@@ -1,11 +1,11 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from typing import List, Optional
 from app.extensions import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import String, Integer, Float
 
-from app.models.invoice import Invoice, invoice_service
+from app.models.association_tables import invoice_service
 
 
 class Service(db.Model):
