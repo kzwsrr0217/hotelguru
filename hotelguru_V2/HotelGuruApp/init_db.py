@@ -36,7 +36,7 @@ if not RoomType.query.first():
 else:
     print("A szobatípusok már léteznek!")
 
-# # Room hozzáadása
+# Room hozzáadása
 # from app.models.room import Room
 # db.session.add_all([ Room(number=101, floor=1, name="Szoba 101", description="Egy ágyas szoba", price=10000, room_type=db.session.get(RoomType, 1)),
 #                      Room(number=102, floor=1, name="Szoba 102", description="Két ágyas szoba", price=15000, room_type=db.session.get(RoomType, 2)),
@@ -82,7 +82,7 @@ else:
 # db.session.add(user)
 
 # u = db.session.get(User, 1)
-# u.roles.append(db.session.get(Role,3))
+# u.roles.append(db.session.get(Role,2))
 # # print(u)
 # db.session.commit()
 
@@ -91,7 +91,7 @@ else:
 #Reservation
 from app.models.reservation import Reservation
 from datetime import date
-from app.models.invoice import Invoice
+#from app.models.invoice import Invoice
 if not Reservation.query.first():
     try:
         Reservation.create_reservation(
@@ -106,9 +106,9 @@ if not Reservation.query.first():
 else:
     print("A foglalás már létezik!")
 
-reservation_id = 1
-service_ids_at_booking = [1, 2]  # A foglaláskor igénybe vett szolgáltatások
-service_ids_after_booking = [3]  # A foglalás után igénybe vett szolgáltatások
+# reservation_id = 1
+# service_ids_at_booking = [1, 2]  # A foglaláskor igénybe vett szolgáltatások
+# service_ids_after_booking = [3]  # A foglalás után igénybe vett szolgáltatások
 
 # 1. Foglaláskor létrehozzuk a számlát a foglaláskor igénybe vett szolgáltatásokkal.
 # try:
@@ -120,13 +120,13 @@ service_ids_after_booking = [3]  # A foglalás után igénybe vett szolgáltatá
 #     print(f"Hiba a számla létrehozásakor: {e}")
 
 # 2. Később, amikor a felhasználó a foglalás után vesz igénybe szolgáltatásokat.
-try:
-    invoice= db.session.get(Invoice, 1)
-    invoice.add_services_to_invoice(service_ids=service_ids_after_booking)
-    print(f"Szolgáltatások sikeresen hozzáadva a számlához!")
-    print(f"Használt szolgáltatások (összesen): {invoice.used_services}")
-    print(f"Végösszeg (frissítve): {invoice.amount}")
-except ValueError as e:
-    print(f"Hiba a szolgáltatások hozzáadásakor: {e}")
+# try:
+#     invoice= db.session.get(Invoice, 1)
+#     invoice.add_services_to_invoice(service_ids=service_ids_after_booking)
+#     print(f"Szolgáltatások sikeresen hozzáadva a számlához!")
+#     print(f"Használt szolgáltatások (összesen): {invoice.used_services}")
+#     print(f"Végösszeg (frissítve): {invoice.amount}")
+# except ValueError as e:
+#     print(f"Hiba a szolgáltatások hozzáadásakor: {e}")
 
 

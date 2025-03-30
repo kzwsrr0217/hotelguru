@@ -14,6 +14,7 @@ class Service(db.Model):
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     description: Mapped[str] = mapped_column(String(200))
     price: Mapped[float] = mapped_column(Float)
+    deleted : Mapped[int] = mapped_column(default = 0)
     
 
     invoices: Mapped[List["Invoice"]] = relationship(secondary=invoice_service, back_populates="services")

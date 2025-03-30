@@ -1,4 +1,6 @@
-﻿from app.extensions import db
+﻿import enum
+from os import statvfs_result
+from app.extensions import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Integer, Float, Date, String
 from sqlalchemy import ForeignKey, Column, Table
@@ -9,7 +11,10 @@ from app.models.service import Service
 from sqlalchemy.exc import IntegrityError
 from app.models.association_tables import invoice_service
 
-
+class StatusEnum(enum.Enum):
+    Canceled  = 0,
+    Live      = 1,
+    Colsed    = 2
 
 class Invoice(db.Model):
     __tablename__ = "invoices"
@@ -24,16 +29,21 @@ class Invoice(db.Model):
     used_services: Mapped[str] = mapped_column(String(200), default="")
     services: Mapped[List["Service"]] = relationship(secondary=invoice_service, back_populates="invoices")
 
+    status : Mapped[StatusEnum] = mapped_column(default = "Live")
+
     @classmethod
     def create_invoice(cls, reservation_id: int, service_ids: list[int] = None) -> "Invoice":
-        # 1. Ellenőrizzük, hogy a foglalás létezik-e.
         reservation = db.session.get(Reservation, reservation_id)
+        # 1. Ellenőrizzük, hogy a foglalás létezik-e.
         if not reservation:
             raise ValueError(f"Nincs foglalás ezzel az azonosítóval: {reservation_id}")
         
         # 2. Számoljuk ki a számla végösszegét.
-        total_amount = reservation.room.price * (reservation.end_date - reservation.start_date).days  # Szoba ára * eltelt napok
-        
+        total_amount = 0
+        for room in reservation.rooms:
+            total_amount += room.price
+        total_amount *= (reservation.end_date - reservation.start_date).days  # Szoba ára * eltelt napok
+       
         # 3. Létrehozzuk az új számlát.
         invoice = cls(reservation_id=reservation_id, amount=total_amount)
 
@@ -75,6 +85,7 @@ class Invoice(db.Model):
         # 3. Frissítjük a used_services stringet.
         used_service_ids = [int(x) for x in self.used_services.split(",") if x]  # Meglévő ID-k listája
         for service_id in service_ids:
+            print (service_id)
             if service_id not in used_service_ids:
                 used_service_ids.append(service_id)
         self.used_services = ",".join(map(str, used_service_ids))

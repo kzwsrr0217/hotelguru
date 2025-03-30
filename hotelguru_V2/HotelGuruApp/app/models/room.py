@@ -10,7 +10,7 @@ from typing import List, Optional
 class Room(db.Model):
     __tablename__ = "rooms"
     id: Mapped[int] = mapped_column(primary_key=True)
-    number: Mapped[int] = mapped_column(Integer, nullable=False)
+    number: Mapped[int] = mapped_column(Integer, unique=True, nullable=False)
     floor: Mapped[int] = mapped_column(Integer, nullable=False)
     name: Mapped[Optional[str]] = mapped_column(String(50))
     description: Mapped[Optional[str]] = mapped_column(String(200))
@@ -20,8 +20,7 @@ class Room(db.Model):
     room_type_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("room_types.id"), nullable=False)
     room_type: Mapped["RoomType"] = relationship("RoomType", back_populates="rooms")
 
-    reservations: Mapped[List["Reservation"]] = relationship(back_populates="room")
-
+    #reservations: Mapped[List["Reservation"]] = relationship(secondary="reservation_room", back_populates="rooms")
     
     
 
