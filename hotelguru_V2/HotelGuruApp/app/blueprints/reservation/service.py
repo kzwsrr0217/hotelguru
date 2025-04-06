@@ -1,21 +1,33 @@
+from platform import android_ver
 from app.extensions import db
-from app.blueprints.reservation.schemas import ReservationResponseSchema, ReservationListSchema, ReservationRequestSchema
+from app.blueprints.reservation.schemas import ReservationResponseSchema, ReservationListSchema, ReservationRequestSchema, ReservationByUserSchema
 from app.models.user import User
 from app.models.room import Room
-from app.models.reservation import Reservation
+from app.models.reservation import Reservation, StatusEnum
 
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, or_
 
 class ReservationService:
-    
+
     @staticmethod
     def add_reservation(request):
         try:
             user = User.query.get(request['user'])
-            rooms = db.session.query(Room).filter(Room.id.in_(request['room_ids'])).all()
+            if not user:
+                return False, "Invalid user"
+            selected_rooms = []
+            for room_number_request in request['room_numbers']:
+                rooms = db.session.query(Room).filter(
+                    and_(
+                        Room.number == room_number_request,
+                        Room.is_available == True
+                    )
+                ).all()
+                
+                if not rooms:
+                    return False, f"Room number {room_number_request} is not available or does not exist"
             
-            if not user or len(rooms) != len(request['room_ids']):
-                return False, "Invalid user or room IDs"
+                selected_rooms.extend(rooms)
 
             reservation = Reservation(
                 start_date=request['start_date'],
@@ -23,42 +35,59 @@ class ReservationService:
                 reservation_date=request['reservation_date'],
                 user=user
             )
-            reservation.rooms.extend(rooms)
+        
+            reservation.rooms.extend(selected_rooms)
+        
+            for room in selected_rooms:
+                room.is_available = False
+            
             db.session.add(reservation)
             db.session.commit()
-            
+        
             return True, ReservationResponseSchema().dump(reservation)
+        
         except Exception as ex:
             print(ex)
+            db.session.rollback()
             return False, "reservation_add() error!"
-   
+    
     @staticmethod
     def reservation_list_all():
-        reservation = db.session.execute( select(Reservation)).scalars().all()
-        return True, ReservationListSchema().dump(reservation, many = True)
-    
+        reservations = db.session.execute(select(Reservation)).scalars().all()
+        return True,ReservationListSchema().dump(reservations, many=True)
+
     @staticmethod
     def serach_reservation_by_room(rid):
         reservations = db.session.execute(
-            select(Reservation).filter(Reservation.rooms.any(Room.id == rid))
+            select(Reservation).filter(Reservation.rooms.any(Room.number == rid))
         ).scalars().all()
         if not reservations:
             return False, "Reservation not found!"
-        return True, ReservationListSchema().dump(reservations, many=True)
+        return True,ReservationListSchema().dump(reservations, many=True)
 
     @staticmethod
     def serach_reservation_by_id(rid):
         reservation = db.session.execute(select(Reservation).filter(Reservation.id==rid)).scalar_one_or_none()
         if reservation is None:
-            return False, "Reservatin not found!"
+            return False, "Reservation not found!"
+        #return True, ReservationService.serialize_reservations(reservation)
         return True,ReservationListSchema().dump(reservation)
 
     @staticmethod
     def serach_reservation_by_user(uid):
-        reservation = db.session.execute(select(Reservation).filter(Reservation.user_id==uid)).scalars() 
-        if reservation is None:
-            return False, "Reservatin not found!"
-        return True,ReservationListSchema().dump(reservation, many=True)
+        reservations = db.session.execute(select(Reservation).filter(
+            and_(
+                Reservation.user_id==uid,
+                or_(
+                    Reservation.status == "Depending",
+                    Reservation.status == "Success"
+                )
+            )
+        )).scalars().all()
+        if not reservations:
+            return False, "User not found!"
+        return True,ReservationByUserSchema().dump(reservations, many=True)
+
     
 
     @staticmethod
@@ -66,18 +95,17 @@ class ReservationService:
         try:
             reservation = db.session.get(Reservation, rid)
             if reservation:
-                user = User.query.get(request["user"])
-                rooms = db.session.query(Room).filter(Room.id.in_(request['room_ids'])).all()
+                rooms = db.session.query(Room).filter(Room.number.in_(request['room_numbers'])).all()
                 
-                if not user or len(rooms) != len(request['room_ids']):
-                    return False, "Invalid user or room IDs"
+                #if not user or 
+                if len(rooms) != len(request['room_numbers']):
+                    return False, "Invalid user or room numberss"
                     
                 reservation.start_date = request["start_date"]
                 reservation.end_date = request["end_date"]
                 reservation.reservation_date = request["reservation_date"]
-                reservation.user = user
                 reservation.rooms = rooms
-                reservation.deleted = request["deleted"]
+                reservation.status = request["status"]
                 db.session.commit()
                 return True, ReservationResponseSchema().dump(reservation)
             return False, "Reservation not found!"
@@ -85,15 +113,3 @@ class ReservationService:
         except Exception as ex:
             print(ex)
             return False, "Reservation_update() error!"
-
-    # @staticmethod
-    # def delete_reservation(rid):
-    #     try:
-    #         reservation = db.session.get(Reservation, rid)
-    #         if reservation:
-    #             reservation.deleted = 1
-    #             db.session.commit()
-            
-    #     except Exception as ex:
-    #         return False, "reservation_delete() error!"
-    #     return True, "OK"

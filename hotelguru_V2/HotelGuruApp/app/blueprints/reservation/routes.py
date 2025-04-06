@@ -1,5 +1,5 @@
 from app.blueprints.reservation import bp
-from app.blueprints.reservation.schemas import ReservationListSchema, ReservationRequestSchema, ReservationResponseSchema, ReservationUpdateSchema
+from app.blueprints.reservation.schemas import ReservationListSchema, ReservationRequestSchema, ReservationResponseSchema, ReservationUpdateSchema, ReservationByUserSchema
 from app.blueprints.reservation.service import ReservationService
 from apiflask.fields import String, Integer
 from apiflask import HTTPError
@@ -15,6 +15,8 @@ def reservation_list_all():
     if success:
         return response, 200
     raise HTTPError(message=response, status_code=400)
+
+
 
 @bp.get('/list_by_room/<int:rid>')
 @bp.output(ReservationListSchema(many = True))
@@ -33,12 +35,13 @@ def reservation_search_by_id(rid):
     raise HTTPError(message=response, status_code=400)
 
 @bp.get('/list_by_user/<int:uid>')
-@bp.output(ReservationListSchema(many = True))
-def reservation_list_by_user(uid):
+@bp.output(ReservationByUserSchema(many = True))
+def reservation_by_user(uid):
     success, response = ReservationService.serach_reservation_by_user(uid)
     if success:
         return response, 200
     raise HTTPError(message=response, status_code=400)
+
 
 
 @bp.post('/add')
@@ -58,11 +61,3 @@ def reservation_update(rid, json_data):
     if success:
         return response, 200
     raise HTTPError(message=response, status_code=400)
-
-
-# @bp.delete('/delete/<int:rid>')
-# def delete_reservation(rid):
-#     success, response = ReservationService.delete_reservation(rid)
-#     if success:
-#         return response, 200
-#     raise HTTPError(message=response, status_code=400)

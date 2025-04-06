@@ -16,7 +16,7 @@ class UserRequestSchema(Schema):
         
     name = fields.String()
     email = String(validate=Email())
-    password = fields.String()
+    password = fields.String(validate=Length(min=6))
     phone = fields.String()
     address = fields.Nested(AddressSchema)
 
@@ -36,3 +36,9 @@ class UserLoginSchema(Schema):
 class RoleSchema(Schema):
     id = fields.Integer()
     name = fields.String()
+
+class UserUpdateSchema(Schema):
+    email = String(validate=Email())
+    address = fields.Nested(AddressSchema)
+    phone_number = fields.String()
+    password = fields.String(validate=Length(min=6))

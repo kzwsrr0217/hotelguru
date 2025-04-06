@@ -5,39 +5,36 @@ from apiflask.validators import Length, OneOf, Email
 from app.models.reservation import Reservation
 from app.blueprints.user.schemas import UserResponseSchema
 from app.models.room import Room
+from app.models.room_type import RoomType
 
-class UserSchema(Schema):
-    id = fields.Integer()
-    name = fields.String()
-    
-class RoomSchema(Schema):
-    id = fields.Integer()
+class SchemaForRoom(Schema):
     number = fields.Integer()
-    floor = fields.Integer()
-    name = fields.String()  
 
+class RoomTypeRequestItem(Schema):
+    room_type_id = fields.Integer()
+    quantity = fields.Integer()
 
 class ReservationRequestSchema(Schema):
+    user = fields.Integer()
     start_date = fields.Date()
     end_date = fields.Date()
-    reservation_date= fields.Date()
-    user = fields.Integer(data_key="user_id") 
-    room_ids = fields.List(fields.Integer())
+    reservation_date = fields.Date()
+    room_numbers = fields.List(fields.Integer())
+
     
 class ReservationUpdateSchema(Schema):
     start_date = fields.Date()
     end_date = fields.Date()
     reservation_date= fields.Date()
-    user = fields.Integer(data_key="user_id") 
-    room_ids = fields.List(fields.Integer())
-    deleted = fields.Integer()
+    room_numbers = fields.List(fields.Integer())
+    status = fields.String()
 
 class ReservationResponseSchema(Schema):
     start_date = fields.String()
     end_date = fields.String()
     reservation_date = fields.String()
-    user = fields.Nested(UserSchema) 
-    rooms = fields.List(fields.Nested(RoomSchema))
+    rooms = fields.List(fields.Nested(SchemaForRoom))
+    status = fields.String()
     
 
 class ReservationListSchema(Schema):
@@ -45,6 +42,14 @@ class ReservationListSchema(Schema):
     start_date = fields.String()
     end_date = fields.String()
     reservation_date = fields.String()
-    user = fields.Nested(UserSchema) 
-    rooms = fields.List(fields.Nested(RoomSchema))
-    deleted = fields.Integer()
+    rooms = fields.List(fields.Nested(SchemaForRoom))
+    status = fields.String()
+
+class ReservationByUserSchema(Schema):
+    #id = fields.Integer()
+    start_date = fields.String()
+    end_date = fields.String()
+    reservation_date = fields.String()
+    rooms = fields.List(fields.Nested(SchemaForRoom))
+    status = fields.String()
+

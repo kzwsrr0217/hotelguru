@@ -15,6 +15,13 @@ class RoomRequestSchema(Schema):
     price = fields.Float()
     is_available = fields.Boolean()
     room_type_id = fields.Integer()
+
+class RoomUpdateSchema(Schema):
+    name = fields.String()
+    description = fields.String()
+    price = fields.Float()
+    is_available = fields.Boolean()
+    room_type_id = fields.Integer()
     
 class RoomResponseSchema(Schema):
     number = fields.Integer()
@@ -27,12 +34,18 @@ class RoomResponseSchema(Schema):
 
 
 
-class RoomListSchema(Schema):
-    id = fields.Integer()
+class AllRoomListSchema(Schema):
+    number = fields.Integer()
+    floor = fields.Integer()
+    name = fields.String()
+    price = fields.Float()
+    room_type = fields.Nested(RoomTypeSchema)
+
+
+class RoomSchema(Schema):
     number = fields.Integer()
     floor = fields.Integer()
     name = fields.String()
     description = fields.String()
     price = fields.Float()
-    is_available = fields.Boolean()
     room_type = fields.Nested(RoomTypeSchema)

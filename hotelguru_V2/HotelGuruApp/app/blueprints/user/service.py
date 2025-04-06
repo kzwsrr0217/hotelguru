@@ -22,9 +22,12 @@ class UserService:
                 )
             db.session.add(user)
             db.session.commit()
+        except KeyError as ke:
+            return False, f"Missing required field: {str(ke)}"
+        except ValueError as ve:
+            return False, f"Invalid data format: {str(ve)}"
         except Exception as ex:
-            print(ex)
-            return False, "Incorrect User data!"
+            return False, f"Registration error: {str(ex)}"
         return True, UserResponseSchema().dump(user)
         
     @staticmethod
@@ -48,14 +51,35 @@ class UserService:
         if user is None:
             return False, "User not found!"
         return True, RoleSchema().dump(obj=user.roles, many=True)
-    
 
+    
     @staticmethod
-    def user_add_address(request):
+    def update_user(uid, request):
         try:
-            address = Address(**request)
-            db.session.add(address)
-            db.session.commit()
+            user = db.session.get(User, uid)
+            if user:
+                if "address" in request:
+                    address_data = request["address"]
+                    if user.address:
+                        user.address.street = address_data.get("street", user.address.street)
+                        user.address.city = address_data.get("city", user.address.city)
+                        user.address.postalcode = address_data.get("postalcode", user.address.postalcode)
+                    else:
+                        user.address = Address(**address_data)
+
+                if "email" in request:
+                    user.email = request["email"]
+                
+                if "phone_number" in request:
+                    user.phone = request["phone_number"]
+                
+                if "password" in request:
+                    user.set_password(user.password)
+                
+                db.session.commit()
+                return True, UserResponseSchema().dump(user)
+            return False, "User not found!"
+            
         except Exception as ex:
-            return False, "Incorrect Address data!"
-        return True, address.id
+            print(ex)
+            return False, "User_update() error!"

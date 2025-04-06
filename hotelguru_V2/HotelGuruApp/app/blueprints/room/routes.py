@@ -1,5 +1,5 @@
 from app.blueprints.room import bp
-from app.blueprints.room.schemas import RoomListSchema, RoomRequestSchema, RoomResponseSchema
+from app.blueprints.room.schemas import RoomSchema, RoomRequestSchema, RoomResponseSchema, AllRoomListSchema, RoomUpdateSchema
 from app.blueprints.room.service import RoomService
 from apiflask.fields import String, Integer
 from apiflask import HTTPError
@@ -9,17 +9,17 @@ def index():
     return 'This is The Room Blueprint'
 
 @bp.get('/list/')
-@bp.output(RoomListSchema(many = True))
+@bp.output(AllRoomListSchema(many = True))
 def room_list_all():
     success, response = RoomService.room_list_all()
     if success:
         return response, 200
     raise HTTPError(message=response, status_code=400)
 
-@bp.get('/list/<int:rid>')
-@bp.output(RoomListSchema(many = True))
-def room_list_type(rid):
-    success, response = RoomService.room_list_type(rid)
+@bp.get('/show/<int:rid>')
+@bp.output(RoomSchema)
+def selected_room(rid):
+    success, response = RoomService.selected_room(rid)
     if success:
         return response, 200
     raise HTTPError(message=response, status_code=400)
@@ -36,7 +36,7 @@ def room_add_new(json_data):
 
 
 @bp.put('/update/<int:rid>')
-@bp.input(RoomRequestSchema, location="json")
+@bp.input(RoomUpdateSchema, location="json")
 @bp.output(RoomResponseSchema)
 def room_update(rid, json_data):
     success, response = RoomService.room_update(rid, json_data)

@@ -1,6 +1,6 @@
 from flask import jsonify
 from app.blueprints.user import bp
-from app.blueprints.user.schemas import UserResponseSchema, UserRequestSchema, UserLoginSchema, RoleSchema, AddressSchema
+from app.blueprints.user.schemas import UserResponseSchema, UserRequestSchema, UserLoginSchema, RoleSchema, AddressSchema, UserUpdateSchema
 from app.blueprints.user.service import UserService
 from apiflask import HTTPError
 from apiflask.fields import String, Email, Nested, Integer, List
@@ -51,12 +51,12 @@ def user_list_user_roles(uid):
         return response, 200
     raise HTTPError(message=response, status_code=400)
 
-
-@bp.post('/address/add')
+@bp.put('/update/<int:uid>')
 @bp.doc(tags=["user"])
-@bp.input(AddressSchema, location="json")
-def user_address_add(json_data):
-    success, response = UserService.user_add_address(json_data)
+@bp.input(UserUpdateSchema, location="json")
+@bp.output(UserResponseSchema)
+def update_user(uid, json_data):
+    success, response = UserService.update_user(uid, json_data)
     if success:
-        return str(response), 200
+        return response, 200
     raise HTTPError(message=response, status_code=400)
