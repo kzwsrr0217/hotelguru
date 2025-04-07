@@ -7,7 +7,6 @@ from app.models.role import Role  # Import the Role class
 from app.models.address import Address  # Import the Address class
 from app.models.reservation import Reservation  # Import the Reservation class
 from werkzeug.security import generate_password_hash, check_password_hash
-from marshmallow import Schema, fields
 
 
 
@@ -43,7 +42,3 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-# class UserSchemaResponse(Schema):
-#     id = fields.Integer()
-#     name = fields.String()
-#     email = fields.String()
