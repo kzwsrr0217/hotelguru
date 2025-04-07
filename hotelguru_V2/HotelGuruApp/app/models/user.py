@@ -3,6 +3,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import String, Integer
 from sqlalchemy import ForeignKey, Column, Table
 from typing import List, Optional
+from app.models.role import Role  # Import the Role class
+from app.models.address import Address  # Import the Address class
+from app.models.reservation import Reservation  # Import the Reservation class
 from werkzeug.security import generate_password_hash, check_password_hash
 
 

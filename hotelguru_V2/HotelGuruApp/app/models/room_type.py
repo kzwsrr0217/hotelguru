@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from app.extensions import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.types import String
+from sqlalchemy import String
 from typing import List
+from app.models.room import Room 
 
 class RoomType(db.Model):
     __tablename__ = "room_types"
