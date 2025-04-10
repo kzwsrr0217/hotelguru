@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Számla #{{ invoice.id }}</title>
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; margin: 40px; font-size: 12px; } /* DejaVu Sans a magyar karakterekhez WeasyPrintben */
+        h1 { color: #2c3e50; border-bottom: 1px solid #ccc; padding-bottom: 10px;}
+        .header, .details, .totals { margin-bottom: 20px; }
+        .header p, .details p { margin: 5px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .total-row td { font-weight: bold; border-top: 2px solid #333; }
+        .address { margin-top: 30px; }
+        .address p { margin: 3px 0; }
+    </style>
+</head>
+<body>
+    <h1>Számla</h1>
+
+    <div class="header">
+        <p><strong>Számla Sorszáma:</strong> #{{ invoice.id }}</p>
+        <p><strong>Kiállítás Dátuma:</strong> {{ invoice.issue_date.strftime('%Y-%m-%d') }}</p>
+        <p><strong>Foglalás Azonosító:</strong> {{ invoice.reservation.id }}</p>
+        <p><strong>Foglalás Időtartama:</strong> {{ invoice.reservation.start_date.strftime('%Y-%m-%d') }} - {{ invoice.reservation.end_date.strftime('%Y-%m-%d') }}</p>
+        <p><strong>Számla Státusza:</strong> {{ invoice.status.name }}</p> {# .name kell az enum nevéhez #}
+    </div>
+
+    <div class="address">
+        <p><strong>Vendég adatai:</strong></p>
+        {% if invoice.reservation and invoice.reservation.user %}
+            <p>{{ invoice.reservation.user.name }}</p>
+            {% if invoice.reservation.user.address %}
+            <p>{{ invoice.reservation.user.address.street }}</p>
+            <p>{{ invoice.reservation.user.address.postalcode }} {{ invoice.reservation.user.address.city }}</p>
+            {% else %}
+            <p>Cím nem található.</p>
+            {% endif %}
+             <p>Email: {{ invoice.reservation.user.email }}</p>
+             <p>Telefon: {{ invoice.reservation.user.phone }}</p>
+        {% else %}
+            <p>Vendég adatok nem találhatók.</p>
+        {% endif %}
+    </div>
+
+    <div class="details">
+        <h2>Részletek</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tétel</th>
+                    <th>Leírás</th>
+                    <th>Mennyiség (éj/db)</th>
+                    <th>Egységár (Ft)</th>
+                    <th>Összesen (Ft)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {# Szállás díja #}
+                {% set nights = (invoice.reservation.end_date - invoice.reservation.start_date).days %}
+                {% if nights <= 0 %}{% set nights = 1 %}{% endif %} {# Minimum 1 éj #}
+                {% set total_room_cost = 0 %}
+                {% for room in invoice.reservation.rooms %}
+                    {% set room_subtotal = room.price * nights %}
+                    {% set total_room_cost = total_room_cost + room_subtotal %}
+                    <tr>
+                        <td>Szállás</td>
+                        <td>{{ room.number }} szoba ({{ room.name|default('N/A', true) }})</td>
+                        <td>{{ nights }} éj</td>
+                        <td>{{ "%.2f"|format(room.price) }}</td>
+                        <td>{{ "%.2f"|format(room_subtotal) }}</td>
+                    </tr>
+                {% endfor %}
+
+                {# Szolgáltatások #}
+                {% set total_service_cost = 0 %}
+                {% if invoice.services %}
+                     {% for service in invoice.services %}
+                        {% set total_service_cost = total_service_cost + service.price %}
+                         <tr>
+                             <td>Szolgáltatás</td>
+                             <td>{{ service.name }}</td>
+                             <td>1 db</td>
+                             <td>{{ "%.2f"|format(service.price) }}</td>
+                             <td>{{ "%.2f"|format(service.price) }}</td>
+                         </tr>
+                     {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">Nincsenek igénybe vett szolgáltatások.</td>
+                    </tr>
+                {% endif %}
+
+                {# Összesítés sor #}
+                <tr class="total-row">
+                    <td colspan="4">Mindösszesen:</td>
+                    {# A sablonban is kiszámolhatjuk, de jobb a service-ből átadott invoice.amount-ot használni #}
+                    {# Itt most a biztonság kedvéért újra kiszámoljuk, de lehetne {{ "%.2f"|format(invoice.amount) }} #}
+                    <td>{{ "%.2f"|format(total_room_cost + total_service_cost) }}</td>
+                    {# Vagy ha bízunk az invoice.amount-ban: #}
+                    {# <td>{{ "%.2f"|format(invoice.amount) }}</td> #}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="totals">
+        <p><strong>Fizetendő Végösszeg: {{ "%.2f"|format(invoice.amount) }} Ft</strong></p>
+         {# Itt lehetne további infó: Fizetési határidő, bankszámlaszám stb. #}
+    </div>
+
+</body>
+</html>

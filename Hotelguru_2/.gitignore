@@ -1,0 +1,38 @@
+# .gitignore tartalma
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+env1/ # A te esetedben ez
+.venv/
+
+# Environment variables file
+.env*
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Pytest cache
+.pytest_cache/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Secrets / Sensitive Files (Példák)
+# *.pem
+# *.key
+# credentials.*

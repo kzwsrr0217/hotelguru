@@ -1,0 +1,63 @@
+
+services:
+  # Alkalmazás szolgáltatás
+  app:
+    build: .
+    image: hotelguru-app
+    container_name: hotelguru_app_instance # _ az ajánlott névben, nem -
+    ports:
+      - "8888:8888"
+    volumes:
+      # Kód csatolása fejlesztéshez (opcionális, gyorsítja a kódváltozások tesztelését)
+      # Ha ezt használod, nem kell mindig újraépíteni az image-et Python kód változásakor
+      # De a függőségek (requirements.txt) változásakor továbbra is kell a --build
+      - .:/app 
+    environment:
+      # Adatbázis kapcsolati adatok környezeti változóként átadva a Flask appnak
+      # Ezeknek egyezniük kell a db service beállításaival és a config.py alapértelmezéseivel/felülírásaival
+      - DB_USER=hotel_user
+      - DB_PASSWORD=hotel_password
+      - DB_HOST=db # A db service nevét használjuk hostként
+      - DB_NAME=hotel_db
+      - FLASK_APP=run_app:create_app() # Marad a Flask app indításához
+      # Szükség lehet még:
+      - FLASK_DEBUG=1 # Fejlesztési mód bekapcsolása (automatikus újraindítás kódváltozáskor, ha a kódot is csatolod volume-ként)
+      - SECRET_KEY=my secret key # Ezt is érdemes lehet beállítani expliciten
+      - JWT_SECRET_KEY=my-super-secret-jwt-key-change-me # <<< ÚJ SOR
+    # Az app csak akkor induljon, ha a db szolgáltatás már elindult és kész
+    depends_on:
+      db:
+        condition: service_healthy # Megvárja, amíg a MySQL "egészséges" állapotba kerül
+    # Parancs marad (vagy használhatunk gunicorn-t később)
+    # command: ["flask", "run", "--host=0.0.0.0", "--port=8888"] # CMD a Dockerfile-ból jön
+
+  # Adatbázis szolgáltatás (MySQL)
+  db:
+    # Hivatalos MySQL image használata (használhatsz konkrét verziót is, pl. mysql:8.0)
+    image: mysql:latest 
+    container_name: hotelguru_db_instance
+    # Mindig induljon újra, ha leállna
+    restart: always 
+    environment:
+      # Jelszavak és adatbázis név - **FONTOS: Éles környezetben ezeket ne itt add meg!**
+      MYSQL_ROOT_PASSWORD: root_password_change_me # Erős jelszó kellene!
+      MYSQL_DATABASE: hotel_db # Létrehozza ezt az adatbázist
+      MYSQL_USER: hotel_user # Létrehozza ezt a felhasználót
+      MYSQL_PASSWORD: hotel_password # Ehhez a felhasználóhoz tartozó jelszó
+    volumes:
+      # Named volume az adatok tartós tárolásához
+      - mysql_data:/var/lib/mysql 
+    ports:
+      # MySQL port kitevése a hostra (opcionális, de külső eszközökkel való eléréshez kell)
+      # formátum: "HOST_PORT:CONTAINER_PORT"
+      - "3307:3306" 
+    # Egészségellenőrzés, hogy az app megvárhassa a kész DB-t
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+# Docker kötetek definíciója
+volumes:
+  mysql_data: # Kötet a MySQL adatoknak (a régi hoteldb-data törölhető)

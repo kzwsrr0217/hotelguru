@@ -1,0 +1,38 @@
+# Virtuális környezet mappa
+env1/
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Adatbázis fájl (ezt majd volume-ként csatoljuk)
+# Vagy hagyd ki, ha azt akarod, hogy az image tartalmazzon egy kezdeti DB-t
+*.db
+*.db-journal*
+
+# IDE/Editor specifikus
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS specifikus
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Egyéb
+test_output.pdf
+test_weasy.py
+*.log
