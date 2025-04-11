@@ -33,8 +33,12 @@ Ez a módszer biztosítja a konzisztens fejlesztői és futtatási környezetet.
 
 1.  **Repository Klónozása:** (Ha még nem történt meg)
     ```bash
-    git clone <repository_url>
-    cd <repository_root_folder> # Ahol a docker-compose.yml is van (pl. Hotelguru_2)
+    git clone -b v2-docker https://github.com/kzwsrr0217/hotelguru.git
+    vagy
+    git clone https://github.com/kzwsrr0217/hotelguru.git
+    cd hotelguru
+    git branch -r
+    git checkout v2-docker
     ```
 
 2.  **Konténerek Építése és Indítása:**
