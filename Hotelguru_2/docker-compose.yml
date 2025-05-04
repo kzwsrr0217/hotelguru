@@ -32,6 +32,23 @@ services:
     # command: ["flask", "run", "--host=0.0.0.0", "--port=8888"] # CMD a Dockerfile-ból jön
 
   # Adatbázis szolgáltatás (MySQL)
+  frontend:
+    build: ../hotelguru-frontend
+    image: hotelguru-frontend
+    container_name: hotelguru_frontend_instance
+    ports:
+      - "3000:5173" # A frontend portja (alapértelmezett Vite port)
+    volumes:
+      - ../hotelguru-frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_BASE_URL=http://localhost:8888/api 
+    # <<< MÓDOSÍTSD VAGY ADD HOZZÁ EZT A SORT >>>
+# ...
+    command: ["npm", "run", "dev", "--", "--host"] 
+    # ...
+  # Adatbázis szolgáltatás (MySQL)
   db:
     # Hivatalos MySQL image használata (használhatsz konkrét verziót is, pl. mysql:8.0)
     image: mysql:latest 
