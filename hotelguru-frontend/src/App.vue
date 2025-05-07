@@ -22,6 +22,8 @@
       <template v-if="authStore.isAuthenticated">
         <v-btn text :to="{ name: 'dashboard' }" class="nav-btn">Dashboard</v-btn>
         <v-btn text :to="{ name: 'my-reservations' }" class="nav-btn">Foglalásaim</v-btn>
+        <v-btn :to="{ name: 'user-profile' }" class="nav-btn" variant="text">Profilom</v-btn>
+
         <v-btn v-if="authStore.hasRole('Administrator')" text :to="{ name: 'admin-rooms' }" class="nav-btn">Szobakezelés</v-btn>
 
          <span v-if="authStore.user" class="user-info mr-3 ml-3">

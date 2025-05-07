@@ -9,6 +9,7 @@ import MyReservationsView from '../views/MyReservationsView.vue';
 import AdminView from '../views/admin/AdminView.vue'; 
 import AccessDeniedView from '../views/AccessDeniedView.vue'; 
 import AdminRoomsView from '../views/admin/AdminRoomsView.vue'; // <<< Új import
+import UserProfileView from '../views/UserProfileView.vue'; // <<< ÚJ IMPORT
 
 
 
@@ -66,6 +67,12 @@ const router = createRouter({
         path: '/access-denied',
         name: 'access-denied',
         component: AccessDeniedView,
+    },
+    {
+      path: '/profile', // Vagy '/user/profile'
+      name: 'user-profile',
+      component: UserProfileView,
+      meta: { requiresAuth: true } // Bejelentkezés szükséges
     }
     // --- Később ide jöhetnek a többi védett útvonal ---
     // Pl.:

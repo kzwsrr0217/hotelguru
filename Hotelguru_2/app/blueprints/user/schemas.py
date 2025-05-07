@@ -28,6 +28,7 @@ class UserResponseSchema(Schema):
     id = fields.Integer(dump_only=True, description="Felhasználó egyedi azonosítója")
     name = fields.String(description="Felhasználó teljes neve")
     email = fields.String(description="Felhasználó email címe")
+    phone = fields.String(description="Telefonszám") # <<< HOZZÁADVA
     address = fields.Nested(AddressSchema, description="Felhasználó címe")
 
 
